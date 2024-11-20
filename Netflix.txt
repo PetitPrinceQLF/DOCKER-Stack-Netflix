@@ -1,0 +1,157 @@
+```
+version: "3"
+
+services:
+
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: Plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+      - VERSION=docker
+    volumes:
+      - plex:/config
+      - rudyflix_media:/tv
+      - rudyflix_media:/movies
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: Radarr
+    network_mode: rudyflix
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - radarr:/config
+      - rudyflix_media:/movies
+      - rudyflix_media:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: Sonarr
+    network_mode: rudyflix
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - sonarr:/config
+      - rudyflix_media:/tv
+      - rudyflix_media:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: Prowlarr
+    network_mode: rudyflix
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+#Pour bypass cloudflare les garsss
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: Flaresolverr
+    network_mode: rudyflix
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_HTML=${LOG_HTML:-false}
+      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
+      - TZ=Europe/Paris
+    ports:
+      - 8191:8191
+    restart: unless-stopped
+
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: Gluetun
+    network_mode: vpn
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+      - 8085:8085 # qbittorrent
+    volumes:
+      - gluetun:/gluetun
+    environment:
+      - VPN_SERVICE_PROVIDER=nordvpn
+      - VPN_TYPE=openvpn
+      - OPENVPN_USER=
+      - OPENVPN_PASSWORD=
+      - SERVER_COUNTRIES=Ireland
+      - TZ=Europe/Dublin
+      - UPDATER_PERIOD=24h
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: Qbittorrent
+    network_mode: "service:gluetun"
+    volumes:
+      - qbittorrent:/config
+      - rudyflix_media:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Dublin
+      - WEBUI_PORT=8085
+    depends_on:
+      - gluetun
+    restart: always
+
+  requestrr:
+    image: lscr.io/linuxserver/requestrr:latest
+    container_name: Requestrr
+    network_mode: rudyflix
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - requestrr:/config
+    ports:
+      - 4545:4545
+    restart: unless-stopped
+
+volumes:
+  rudyflix:
+    name: rudyFlix
+  rudyflix_media:
+    name: rudyFlix_Media
+
+  plex:
+    name: Plex
+  radarr:
+    name: Radarr
+  sonarr:
+    name: Sonarr
+  prowlarr:
+    name: Prowlarr
+  gluetun:
+    name: Gluetun
+  qbittorrent:
+    name: Qbittorrent
+  requestrr:
+    name: Requestrr
+
+
+
+networks:
+  rudyflix:
+    external: true
+```
