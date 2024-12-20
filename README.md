@@ -1,5 +1,5 @@
 <h2 align="center">
-  Netflix x Docker
+  RudyFlix
 </h2>
 
 ---
@@ -22,26 +22,26 @@
 
 ## About RudyFlix
 
-**Netflix x Docker** is a self-hosted media server solution that lets you create your own personal streaming platform, just like Netflix. By leveraging powerful tools like Plex, Radarr, Sonarr, and more, RudyFlix allows you to organize, download, and stream your favorite media seamlessly. All components are managed using Docker for ease of setup and maintenance. Customize it to suit your needs and enjoy your content anywhere, anytime.
+**RudyFlix** is a self-hosted media server solution that lets you create your own personal streaming platform, just like Netflix. By leveraging powerful tools like Plex, Radarr, Sonarr, and more, RudyFlix allows you to organize, download, and stream your favorite media seamlessly. All components are managed using Docker for ease of setup and maintenance. Customize it to suit your needs and enjoy your content anywhere, anytime.
 
 ---
 
-## Installing Netflix x Docker
+## Installing RudyFlix
 
-To set up **Netflix with Docker**, follow these steps:
+To set up **RudyFlix**, follow these steps:
 
 ### Step 1: Clone the Repository
 
 Linux and macOS:
 
 ```bash
-sudo git clone https://github.com/PetitPrinceQLF/DOCKER-Stack-Netflix.git
+sudo git clone https://github.com/PetitPrinceQLF/DOCKER-Stack-RudyFlix.git
 ```
 
 Windows:
 
 ```bash
-git clone https://github.com/PetitPrinceQLF/DOCKER-Stack-Netflix.git
+git clone https://github.com/PetitPrinceQLF/DOCKER-Stack-RudyFlix.git
 ```
 
 ### Step 2: Customize Your Stack
@@ -67,7 +67,11 @@ docker-compose up -d
 
 Special thanks to the developers of the Docker images used in this project:
 
-- [LinuxServer.io](https://www.linuxserver.io/) for Plex, Radarr, Sonarr, Prowlarr, and Qbittorrent.
+- [Plex](https://www.plex.tv/)
+- [Radarr](https://github.com/Radarr/Radarr)
+- [Sonarr](https://github.com/Sonarr/Sonarr)
+- [Prowlarr](https://github.com/Prowlarr/Prowlarr)
+- [Qbittorrent](https://github.com/qbittorrent/qBittorrent)
 - [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) for CAPTCHA bypass.
 - [Gluetun](https://github.com/qdm12/gluetun) for VPN tunneling.
 
